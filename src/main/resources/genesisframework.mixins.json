@@ -1,0 +1,35 @@
+{
+  "required": true,
+  "package": "dev.mariany.genesisframework.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AdvancementDisplaysMixin",
+    "ClientRecipeDisplayEntryMixin",
+    "CrafterBlockMixin",
+    "DataPackContentsMixin",
+    "EntityMixin",
+    "PlayerAdvancementTrackerMixin",
+    "RecipeUnlockerMixin",
+    "ServerAdvancementLoaderMixin",
+    "ServerPlayerNetworkHandlerMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "TrialSpawnerStateMixin",
+    "accessor.TrialSpawnerDataAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "AdvancementsScreenMixin",
+    "AnimatedResultButtonMixin",
+    "ClientAdvancementManagerMixin",
+    "MinecraftClientMixin",
+    "RecipeBookWidgetMixin",
+    "RecipeToastMixin",
+    "accessor.ClientAdvancementManagerAccessor",
+    "accessor.ToastManagerAccessor"
+  ]
+}

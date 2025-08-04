@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "genesisframework",
+  "version": "${version}",
+  "name": "Genesis Framework",
+  "description": "A framework for creating custom Age progression systems.",
+  "authors": [
+    "uhmbyee / Mariany Pinkston"
+  ],
+  "contact": {
+    "homepage": "https://mariany.dev/",
+    "sources": "https://github.com/marianyp/Genesis-Framework"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/genesisframework/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.mariany.genesisframework.GenesisFramework"
+    ],
+    "client": [
+      "dev.mariany.genesisframework.client.GFClient"
+    ],
+    "fabric-datagen": [
+      "dev.mariany.genesisframework.GFDataGenerator"
+    ]
+  },
+  "mixins": [
+    "genesisframework.mixins.json"
+  ],
+  "accessWidener": "genesisframework.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": ">=1.21.6",
+    "java": ">=21",
+    "fabric-api": ">=0.128.2"
+  }
+}
