@@ -18,7 +18,7 @@ public record Instruction(
         Optional<Identifier> parent,
         Map<String, AdvancementCriterion<?>> criteria,
         AdvancementRequirements requirements,
-        InstructionDisplay display
+        Optional<InstructionDisplay> display
 ) {
     private static final Codec<Map<String, AdvancementCriterion<?>>> CRITERIA_CODEC = Codec.unboundedMap(
             Codec.STRING,
@@ -30,7 +30,7 @@ public record Instruction(
                             CRITERIA_CODEC.optionalFieldOf("criteria", new HashMap<>()).forGetter(Instruction::criteria),
                             AdvancementRequirements.CODEC.optionalFieldOf("requirements", AdvancementRequirements.EMPTY)
                                     .forGetter(Instruction::requirements),
-                            InstructionDisplay.CODEC.fieldOf("display").forGetter(Instruction::display)
+                            InstructionDisplay.CODEC.optionalFieldOf("display").forGetter(Instruction::display)
                     )
                     .apply(instance, Instruction::new)
     );
@@ -40,7 +40,8 @@ public record Instruction(
         private Identifier parent = null;
         private final Map<String, AdvancementCriterion<?>> criteria = new HashMap<>();
         private AdvancementRequirements requirements = AdvancementRequirements.EMPTY;
-        private InstructionDisplay display;
+        @Nullable
+        private InstructionDisplay display = null;
 
         private Builder() {
         }
@@ -91,7 +92,7 @@ public record Instruction(
                     Optional.ofNullable(this.parent),
                     this.criteria,
                     this.requirements,
-                    this.display
+                    Optional.ofNullable(this.display)
             ));
         }
 

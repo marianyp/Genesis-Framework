@@ -39,7 +39,7 @@ public class InstructionEntry {
 
         return new Advancement(
                 Optional.of(parent),
-                Optional.of(createAdvancementDisplay(instruction)),
+                createAdvancementDisplay(instruction),
                 AdvancementRewards.NONE,
                 criteria,
                 requirements,
@@ -47,10 +47,16 @@ public class InstructionEntry {
         );
     }
 
-    private static AdvancementDisplay createAdvancementDisplay(Instruction instruction) {
-        InstructionDisplay instructionDisplay = instruction.display();
+    private static Optional<AdvancementDisplay> createAdvancementDisplay(Instruction instruction) {
+        Optional<InstructionDisplay> optionalInstructionDisplay = instruction.display();
 
-        return new AdvancementDisplay(
+        if (optionalInstructionDisplay.isEmpty()) {
+            return Optional.empty();
+        }
+
+        InstructionDisplay instructionDisplay = optionalInstructionDisplay.get();
+
+        return Optional.of(new AdvancementDisplay(
                 instructionDisplay.icon(),
                 instructionDisplay.title(),
                 instructionDisplay.description(),
@@ -59,7 +65,7 @@ public class InstructionEntry {
                 false,
                 false,
                 false
-        );
+        ));
     }
 
     public static Identifier getAdvancementId(Identifier id) {

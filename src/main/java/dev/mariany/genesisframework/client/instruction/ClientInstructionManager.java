@@ -44,7 +44,7 @@ public class ClientInstructionManager {
     }
 
     public void reset() {
-        GenesisFramework.LOGGER.info("Resetting Client Instruction Manager");
+        GenesisFramework.LOGGER.info("Resetting instructions state");
 
         this.complete = true;
         this.queueTargetMs = -1;
