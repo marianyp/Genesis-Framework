@@ -12,6 +12,7 @@
     "RecipeUnlockerMixin",
     "ServerAdvancementLoaderMixin",
     "ServerCommandSourceMixin",
+    "ServerPlayerEntityMixin",
     "ServerPlayerNetworkHandlerMixin",
     "ServerPlayNetworkHandlerMixin",
     "SmithingScreenHandlerMixin",

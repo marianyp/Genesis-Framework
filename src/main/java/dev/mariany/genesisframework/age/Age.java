@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mariany.genesisframework.advancement.criterion.CompleteTrialSpawnerCriteria;
 import dev.mariany.genesisframework.advancement.criterion.ObtainAdvancementCriterion;
+import dev.mariany.genesisframework.stat.GFStats;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.AdvancementRequirements;
 import net.minecraft.advancement.criterion.Criteria;
@@ -143,6 +144,22 @@ public record Age(
                                                     NumberRange.IntRange.atLeast(atLeast - 1)).build()
                                     )
                             )
+                    )
+            );
+        }
+
+        public Builder requireKillHostiles(int atLeast) {
+            return criterion("killed_" + atLeast + "_hostiles",
+                    Criteria.TICK.create(
+                            TickCriterion.Conditions.createLocation(
+                                    EntityPredicate.Builder.create().typeSpecific(
+                                            PlayerPredicate.Builder.create().stat(
+                                                    Stats.CUSTOM,
+                                                    GFStats.HOSTILE_KILLS,
+                                                    NumberRange.IntRange.atLeast(atLeast)
+                                            ).build()
+                                    )
+                            ).conditions()
                     )
             );
         }

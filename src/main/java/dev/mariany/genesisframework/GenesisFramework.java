@@ -13,6 +13,7 @@ import dev.mariany.genesisframework.gamerule.GFGamerules;
 import dev.mariany.genesisframework.item.GFItems;
 import dev.mariany.genesisframework.packet.GFPackets;
 import dev.mariany.genesisframework.sound.GFSoundEvents;
+import dev.mariany.genesisframework.stat.GFStats;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -37,6 +38,7 @@ public class GenesisFramework implements ModInitializer {
         GFPackets.register();
         GFComponentTypes.bootstrap();
         GFSoundEvents.bootstrap();
+        GFStats.bootstrap();
         GFCriteria.bootstrap();
         GFItems.bootstrap();
 

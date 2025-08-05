@@ -4,6 +4,8 @@
   "age.genesisframework.age": "Age",
   "age.genesisframework.title": "%s: %s",
   "commands.genesisframework.age.clear": "Cleared cache containing %s shared ages",
+  "commands.genesisframework.age.give.success": "Gave %s to %s players",
+  "commands.genesisframework.age.take.success": "Removed %s from %s players",
   "commands.genesisframework.instructions.reset": "Reset state of %s instructions",
   "commands.genesisframework.instructions.reset.failure": "There are no completed instructions to reset",
   "commands.genesisframework.instructions.skip": "Skipped %s instructions",

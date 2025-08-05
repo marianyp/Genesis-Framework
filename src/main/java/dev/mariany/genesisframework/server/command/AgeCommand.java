@@ -64,6 +64,7 @@ public class AgeCommand {
                                                         )
                                                         .executes(context ->
                                                                 executeGive(
+                                                                        context.getSource(),
                                                                         EntityArgumentType.getPlayers(
                                                                                 context,
                                                                                 "targets"
@@ -82,6 +83,7 @@ public class AgeCommand {
                                                         )
                                                         .executes(context ->
                                                                 executeTake(
+                                                                        context.getSource(),
                                                                         EntityArgumentType.getPlayers(
                                                                                 context,
                                                                                 "targets"
@@ -110,34 +112,46 @@ public class AgeCommand {
         return 1;
     }
 
-    private static int executeGive(Collection<ServerPlayerEntity> targets, AgeEntry ageEntry) {
-        return AgeShareManager.progressPlayersToAge(targets, ageEntry);
+    private static int executeGive(ServerCommandSource source, Collection<ServerPlayerEntity> targets, AgeEntry ageEntry) {
+        int successCount = AgeShareManager.progressPlayersToAge(targets, ageEntry);
+
+        source.sendFeedback(() -> Text.stringifiedTranslatable(
+                        "commands.genesisframework.age.give.success",
+                        ageEntry.getId(),
+                        successCount
+                ),
+                true
+        );
+
+        return successCount;
     }
 
-    private static int executeTake(Collection<ServerPlayerEntity> targets, AgeEntry ageEntry) {
-        int success = 0;
+    private static int executeTake(ServerCommandSource source, Collection<ServerPlayerEntity> targets, AgeEntry ageEntry) {
+        int successCount = (int) targets.stream().filter(player -> takeAge(player, ageEntry)).count();
 
-        for (ServerPlayerEntity player : targets) {
-            if (takeAge(player, ageEntry)) {
-                ++success;
-            }
-        }
+        source.sendFeedback(() -> Text.stringifiedTranslatable(
+                        "commands.genesisframework.age.take.success",
+                        ageEntry.getId(),
+                        successCount
+                ),
+                true
+        );
 
-        return success;
+        return successCount;
     }
 
     private static boolean takeAge(ServerPlayerEntity player, AgeEntry ageEntry) {
         AdvancementEntry advancementEntry = ageEntry.getAdvancementEntry();
         boolean removed = AdvancementHelper.revokeAdvancement(player, advancementEntry);
 
-        List<AgeEntry> children = AgeManager.getInstance().getAges().stream().filter(ageEntry1 ->
-                ageEntry1.getParentAdvancementId()
+        List<AgeEntry> children = AgeManager.getInstance().getAges().stream().filter(otherAge ->
+                otherAge.getAge().parent()
                         .map(parentId -> parentId.equals(ageEntry.getId()))
                         .orElse(false)
         ).toList();
 
         for (AgeEntry child : children) {
-            removed = removed || takeAge(player, child);
+            removed = takeAge(player, child) || removed;
         }
 
         return removed;
