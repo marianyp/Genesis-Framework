@@ -23,6 +23,9 @@ public class RecipeBookWidgetMixin {
     @Shadow
     protected MinecraftClient client;
 
+    /**
+     * Filter Recipe Book results if ANY of the recipe display stacks are locked, to prevent confusion.
+     */
     @WrapOperation(
             method = "refreshResults",
             at = @At(
@@ -31,7 +34,11 @@ public class RecipeBookWidgetMixin {
             )
     )
     private void filterLockedRecipes(
-            RecipeBookResults recipeBookResults, List<RecipeResultCollection> resultCollections, boolean resetCurrentPage, boolean filteringCraftable, Operation<Void> original
+            RecipeBookResults recipeBookResults,
+            List<RecipeResultCollection> resultCollections,
+            boolean resetCurrentPage,
+            boolean filteringCraftable,
+            Operation<Void> original
     ) {
         ClientAgeManager clientAgeManager = ClientAgeManager.getInstance();
         ContextParameterMap contextParameterMap = SlotDisplayContexts.createParameters(

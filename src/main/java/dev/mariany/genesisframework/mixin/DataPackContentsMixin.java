@@ -29,6 +29,9 @@ public class DataPackContentsMixin {
     @Unique
     private InstructionDataLoader instructionDataLoader;
 
+    /**
+     * Initiate age and instruction data loaders.
+     */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onConstruct(
             CombinedDynamicRegistries<ServerDynamicRegistryType> dynamicRegistries,
@@ -43,8 +46,16 @@ public class DataPackContentsMixin {
         this.instructionDataLoader = new InstructionDataLoader(registries);
     }
 
+    /**
+     * Include age and instruction data loaders when getting data pack contents.
+     */
     @WrapOperation(method = "getContents", at = @At(value = "INVOKE", target = "Ljava/util/List;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;"))
-    public List<ResourceReloader> wrapGetContents(Object first, Object second, Object third, Operation<List<ResourceReloader>> original) {
+    public List<ResourceReloader> wrapGetContents(
+            Object first,
+            Object second,
+            Object third,
+            Operation<List<ResourceReloader>> original
+    ) {
         List<ResourceReloader> resourceReloaders = new ArrayList<>(List.of(this.ageLoader, this.instructionDataLoader));
         resourceReloaders.addAll(original.call(first, second, third));
         return resourceReloaders;

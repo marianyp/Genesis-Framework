@@ -22,7 +22,9 @@ public class RecipeToastMixin {
     @Final
     private List<?> displayItems;
 
-    // Prevent showing recipe for item that's locked
+    /**
+     * Prevent showing recipes for items that are locked.
+     */
     @WrapOperation(
             method = "show",
             at = @At(
@@ -30,13 +32,20 @@ public class RecipeToastMixin {
                     target = "Lnet/minecraft/client/toast/RecipeToast;addRecipes(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)V"
             )
     )
-    private static void wrapShow(RecipeToast recipeToast, ItemStack categoryItem, ItemStack unlockedItem, Operation<Void> original) {
+    private static void wrapShow(
+            RecipeToast recipeToast,
+            ItemStack categoryItem,
+            ItemStack unlockedItem,
+            Operation<Void> original
+    ) {
         if (ClientAgeManager.getInstance().isUnlocked(unlockedItem)) {
             original.call(recipeToast, categoryItem, unlockedItem);
         }
     }
 
-    // Prevent calling this.displayItems.get when there aren't any (all locked instructions)
+    /**
+     * Prevent drawing toast when there aren't any display items (i.e. all items locked)
+     */
     @Inject(method = "draw", at = @At(value = "HEAD"), cancellable = true)
     public void injectDraw(DrawContext context, TextRenderer textRenderer, long startTime, CallbackInfo ci) {
         if (displayItems.isEmpty()) {

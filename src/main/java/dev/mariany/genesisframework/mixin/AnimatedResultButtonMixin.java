@@ -14,6 +14,9 @@ public class AnimatedResultButtonMixin {
     @Shadow
     private List<AnimatedResultButton.Result> results;
 
+    /**
+     * Remove any {@link AnimatedResultButton.Result} that have empty {@link AnimatedResultButton.Result#displayItems()}
+     */
     @WrapOperation(
             method = "showResultCollection",
             at = @At(

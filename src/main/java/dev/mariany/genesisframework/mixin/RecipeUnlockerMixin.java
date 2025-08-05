@@ -16,12 +16,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RecipeUnlocker.class)
 public interface RecipeUnlockerMixin {
+    /**
+     * Check if an item is unlocked when calling {@link RecipeUnlocker#shouldCraftRecipe(ServerPlayerEntity, RecipeEntry)}.
+     */
     @Inject(
             method = "shouldCraftRecipe",
             at = @At("HEAD"),
             cancellable = true
     )
-    private void injectShouldCraftRecipe(ServerPlayerEntity player, RecipeEntry<?> recipe, CallbackInfoReturnable<Boolean> cir) {
+    private void injectShouldCraftRecipe(
+            ServerPlayerEntity player,
+            RecipeEntry<?> recipe,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
         ServerWorld serverWorld = player.getWorld();
         RegistryWrapper.WrapperLookup registries = serverWorld.getRegistryManager();
         AgeManager ageManager = AgeManager.getInstance();

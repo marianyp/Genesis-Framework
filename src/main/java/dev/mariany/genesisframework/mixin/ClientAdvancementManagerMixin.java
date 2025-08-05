@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientAdvancementManager.class)
 public class ClientAdvancementManagerMixin {
+    /**
+     * Refresh instruction toasts during advancement update (i.e. data pack reload, advancement progress, etc.).
+     */
     @Inject(method = "onAdvancements", at = @At("TAIL"))
     private void onAdvancementUpdate(AdvancementUpdateS2CPacket packet, CallbackInfo ci) {
         ClientInstructionManager.getInstance().refreshInstructionToasts();

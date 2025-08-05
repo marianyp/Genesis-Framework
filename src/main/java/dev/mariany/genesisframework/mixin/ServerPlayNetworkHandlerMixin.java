@@ -25,8 +25,15 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
+    /**
+     * Check if an item is unlocked when calling {@link ServerRecipeBook#isUnlocked(RegistryKey)}.
+     */
     @WrapOperation(method = "onCraftRequest", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerRecipeBook;isUnlocked(Lnet/minecraft/registry/RegistryKey;)Z"))
-    public boolean wrapOnCraftRequest(ServerRecipeBook recipeBook, RegistryKey<Recipe<?>> recipeKey, Operation<Boolean> original) {
+    public boolean wrapOnCraftRequest(
+            ServerRecipeBook recipeBook,
+            RegistryKey<Recipe<?>> recipeKey,
+            Operation<Boolean> original
+    ) {
         MinecraftServer server = player.getServer();
 
         if (server != null) {

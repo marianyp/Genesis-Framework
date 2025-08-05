@@ -20,6 +20,9 @@ public class ServerPlayerNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
+    /**
+     * Triggers the {@link GFCriteria#OPEN_ADVANCEMENT_TAB} criteria when removing player from Trial Spawner state.
+     */
     @Inject(method = "onAdvancementTab", at = @At(value = "TAIL"))
     public void injectOnAdvancementTab(AdvancementTabC2SPacket packet, CallbackInfo ci) {
         MinecraftServer server = player.getServer();

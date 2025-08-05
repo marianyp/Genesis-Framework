@@ -14,6 +14,9 @@ import java.util.List;
 
 @Mixin(RecipeDisplayEntry.class)
 public class ClientRecipeDisplayEntryMixin {
+    /**
+     * Filter out any locked items from a recipe display.
+     */
     @WrapOperation(
             method = "getStacks",
             at = @At(
@@ -21,7 +24,11 @@ public class ClientRecipeDisplayEntryMixin {
                     target = "Lnet/minecraft/recipe/display/SlotDisplay;getStacks(Lnet/minecraft/util/context/ContextParameterMap;)Ljava/util/List;"
             )
     )
-    public List<ItemStack> getStacks(SlotDisplay slotDisplay, ContextParameterMap parameters, Operation<List<ItemStack>> original) {
+    public List<ItemStack> wrapGetStacks(
+            SlotDisplay slotDisplay,
+            ContextParameterMap parameters,
+            Operation<List<ItemStack>> original
+    ) {
         ClientAgeManager clientAgeManager = ClientAgeManager.getInstance();
         return original.call(slotDisplay, parameters).stream().filter(clientAgeManager::isUnlocked).toList();
     }

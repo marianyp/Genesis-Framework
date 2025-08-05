@@ -16,6 +16,9 @@ import java.util.function.Predicate;
 
 @Mixin(AdvancementDisplays.class)
 public class AdvancementDisplaysMixin {
+    /**
+     * Enforce advancement to be displayed and thus sent to client if it belongs to an age or instruction.
+     */
     @WrapOperation(
             method = "shouldDisplay(Lnet/minecraft/advancement/PlacedAdvancement;Lit/unimi/dsi/fastutil/Stack;Ljava/util/function/Predicate;Lnet/minecraft/advancement/AdvancementDisplays$ResultConsumer;)Z",
             at = @At(value = "INVOKE", target = "Ljava/util/function/Predicate;test(Ljava/lang/Object;)Z")

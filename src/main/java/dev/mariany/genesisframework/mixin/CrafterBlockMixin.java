@@ -17,6 +17,9 @@ import java.util.Optional;
 
 @Mixin(CrafterBlock.class)
 public class CrafterBlockMixin {
+    /**
+     * Prevent Crafter from crafting an item that requires an age.
+     */
     @WrapOperation(
             method = "getCraftingRecipe",
             at = @At(
@@ -25,9 +28,12 @@ public class CrafterBlockMixin {
             )
     )
     private static Optional<RecipeEntry<CraftingRecipe>> wrapGetCraftingRecipe(
-            RecipeCache instance, ServerWorld world, CraftingRecipeInput input, Operation<Optional<RecipeEntry<CraftingRecipe>>> original
+            RecipeCache recipeCache,
+            ServerWorld world,
+            CraftingRecipeInput input,
+            Operation<Optional<RecipeEntry<CraftingRecipe>>> original
     ) {
-        Optional<RecipeEntry<CraftingRecipe>> optionalRecipe = original.call(instance, world, input);
+        Optional<RecipeEntry<CraftingRecipe>> optionalRecipe = original.call(recipeCache, world, input);
 
         if (optionalRecipe.isPresent()) {
             RecipeEntry<CraftingRecipe> recipe = optionalRecipe.get();
@@ -38,6 +44,6 @@ public class CrafterBlockMixin {
             }
         }
 
-        return original.call(instance, world, input);
+        return original.call(recipeCache, world, input);
     }
 }

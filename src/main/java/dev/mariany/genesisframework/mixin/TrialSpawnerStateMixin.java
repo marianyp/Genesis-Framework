@@ -20,6 +20,9 @@ import java.util.UUID;
 
 @Mixin(TrialSpawnerState.class)
 public class TrialSpawnerStateMixin {
+    /**
+     * Triggers the {@link GFCriteria#COMPLETE_TRIAL_SPAWNER_ADVANCEMENT} criteria when removing player from Trial Spawner state.
+     */
     @Inject(
             method = "tick",
             at = @At(

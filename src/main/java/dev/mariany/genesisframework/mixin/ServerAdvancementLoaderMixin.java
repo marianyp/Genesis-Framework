@@ -15,8 +15,19 @@ import java.util.Map;
 
 @Mixin(ServerAdvancementLoader.class)
 public class ServerAdvancementLoaderMixin {
-    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
-    protected void apply(Map<Identifier, Advancement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci) {
+    /**
+     * Invokes the {@link ServerAdvancementEvents#BEFORE_ADVANCEMENTS_LOAD} event during advancements load.
+     */
+    @Inject(
+            at = @At("HEAD"),
+            method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V"
+    )
+    protected void apply(
+            Map<Identifier, Advancement> map,
+            ResourceManager resourceManager,
+            Profiler profiler,
+            CallbackInfo ci
+    ) {
         ServerAdvancementEvents.BEFORE_ADVANCEMENTS_LOAD.invoker().onAdvancementsLoaded(map);
     }
 }

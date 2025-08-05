@@ -74,7 +74,7 @@ public class ClientInstructionManager {
             this.reset();
             this.instructionAdvancements.addAll(changes);
 
-            GenesisFramework.LOGGER.info("Updated instruction advancements. Old Size: {} | New Size: {}",
+            GenesisFramework.LOGGER.info("Loaded instructions. Old Size: {} | New Size: {}",
                     oldSize,
                     this.instructionAdvancements.size()
             );

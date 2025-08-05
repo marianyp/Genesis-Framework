@@ -29,8 +29,15 @@ public class PlayerAdvancementTrackerMixin {
     @Shadow
     private ServerPlayerEntity owner;
 
+    /**
+     * Prevent earning an age's advancement criterion if the parent age is not complete.
+     */
     @Inject(method = "grantCriterion", at = @At(value = "HEAD"), cancellable = true)
-    public void injectGrantCriterion(AdvancementEntry advancement, String criterionName, CallbackInfoReturnable<Boolean> cir) {
+    public void injectGrantCriterion(
+            AdvancementEntry advancement,
+            String criterionName,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
         AgeManager ageManager = AgeManager.getInstance();
         Optional<AgeEntry> optionalAgeEntry = ageManager.find(advancement);
 
@@ -49,7 +56,9 @@ public class PlayerAdvancementTrackerMixin {
         }
     }
 
-
+    /**
+     * Triggers ${@link GFCriteria#OPEN_ADVANCEMENT_TAB}, updates client age item unlocks state, and shares the age advancement with other players.
+     */
     @WrapOperation(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;onStatusUpdate(Lnet/minecraft/advancement/AdvancementEntry;)V"))
     public void wrapOnStatusUpdate(
             PlayerAdvancementTracker playerAdvancementTracker,

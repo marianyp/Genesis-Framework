@@ -32,6 +32,9 @@ public abstract class AdvancementsScreenMixin {
     @Final
     private ClientAdvancementManager advancementHandler;
 
+    /**
+     * Start on Age tab if advancement present.
+     */
     @Inject(method = "init", at = @At(value = "TAIL"))
     public void injectInit(CallbackInfo ci) {
         if (ConfigHandler.getConfig().alwaysStartOnAgesAdvancementScreen) {
@@ -47,6 +50,9 @@ public abstract class AdvancementsScreenMixin {
         }
     }
 
+    /**
+     * Prevents instruction tab from being added.
+     */
     @Inject(method = "onRootAdded", at = @At(value = "HEAD"), cancellable = true)
     public void injectOnRootAdded(PlacedAdvancement root, CallbackInfo ci) {
         if (root.getAdvancementEntry().id().equals(InstructionEntry.ROOT_ADVANCEMENT_ID)) {

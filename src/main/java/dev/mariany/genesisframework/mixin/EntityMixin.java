@@ -23,6 +23,9 @@ import java.util.Optional;
 
 @Mixin(Entity.class)
 public class EntityMixin {
+    /**
+     * Prevent teleporting via a portal if the target dimension is not unlocked.
+     */
     @WrapOperation(
             method = "tickPortalTeleportation",
             at = @At(
@@ -30,7 +33,12 @@ public class EntityMixin {
                     target = "Lnet/minecraft/world/dimension/PortalManager;createTeleportTarget(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)Lnet/minecraft/world/TeleportTarget;"
             )
     )
-    protected TeleportTarget wrapCreateTeleportTarget(PortalManager portalManager, ServerWorld world, Entity entity, Operation<TeleportTarget> original) {
+    protected TeleportTarget wrapCreateTeleportTarget(
+            PortalManager portalManager,
+            ServerWorld world,
+            Entity entity,
+            Operation<TeleportTarget> original
+    ) {
         TeleportTarget target = original.call(portalManager, world, entity);
 
         if (target != null) {
