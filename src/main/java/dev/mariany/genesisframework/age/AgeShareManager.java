@@ -76,7 +76,7 @@ public class AgeShareManager extends PersistentState {
         }
 
         for (Identifier ageId : agesToApply) {
-            ageManager.get(ageId).ifPresent(ageEntry -> shareWithPlayer(serverPlayer, ageEntry));
+            ageManager.get(ageId).ifPresent(ageEntry -> progressPlayerToAge(serverPlayer, ageEntry));
         }
     }
 
@@ -105,7 +105,7 @@ public class AgeShareManager extends PersistentState {
 
         GenesisFramework.LOGGER.info("Preparing to share ages with {} players", sharingPlayers.size());
 
-        shareWithPlayers(sharingPlayers, ageEntry);
+        progressPlayersToAge(sharingPlayers, ageEntry);
     }
 
     public void shareWithTeam(ServerPlayerEntity player, AgeEntry ageEntry) {
@@ -123,26 +123,32 @@ public class AgeShareManager extends PersistentState {
 
             GenesisFramework.LOGGER.info("Preparing to shared ages with {} players on team {}", sharingPlayers.size(), teamName);
 
-            shareWithPlayers(sharingPlayers, ageEntry);
+            progressPlayersToAge(sharingPlayers, ageEntry);
         }
     }
 
-    public static void shareWithPlayer(ServerPlayerEntity player, AgeEntry ageEntry) {
-        shareWithPlayers(List.of(player), ageEntry);
+    public static void progressPlayerToAge(ServerPlayerEntity player, AgeEntry ageEntry) {
+        progressPlayersToAge(List.of(player), ageEntry);
     }
 
-    private static void shareWithPlayers(Collection<ServerPlayerEntity> players, AgeEntry ageEntry) {
+    public static int progressPlayersToAge(Collection<ServerPlayerEntity> players, AgeEntry ageEntry) {
         Optional<Identifier> parentAgeId = ageEntry.getAge().parent();
+
+        int success = 0;
 
         if (parentAgeId.isPresent() && ageEntry.getAge().requiresParent()) {
             AgeManager ageManager = AgeManager.getInstance();
             Optional<AgeEntry> optionalParentAgeEntry = ageManager.get(parentAgeId.get());
-            optionalParentAgeEntry.ifPresent(entry -> shareWithPlayers(players, entry));
+            optionalParentAgeEntry.ifPresent(entry -> progressPlayersToAge(players, entry));
         }
 
         for (ServerPlayerEntity player : players) {
-            AdvancementHelper.giveAdvancement(player, ageEntry.getAdvancementEntry());
+            if (AdvancementHelper.giveAdvancement(player, ageEntry.getAdvancementEntry())) {
+                ++success;
+            }
         }
+
+        return success;
     }
 
     public void unpack(Packed packed) {

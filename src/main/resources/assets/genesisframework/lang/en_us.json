@@ -8,6 +8,7 @@
   "commands.genesisframework.instructions.reset.failure": "There are no completed instructions to reset",
   "commands.genesisframework.instructions.skip": "Skipped %s instructions",
   "commands.genesisframework.instructions.skip.failure": "There are no pending instructions to skip",
+  "genesisframework.age.ageNotFound": "Unknown age: %s",
   "instruction.genesisframework.complete.title": "Guide Complete!",
   "instruction.genesisframework.view_ages": "View Ages",
   "instruction.genesisframework.view_ages.description": "Press %s to view age progression",

@@ -11,6 +11,7 @@
     "PlayerAdvancementTrackerMixin",
     "RecipeUnlockerMixin",
     "ServerAdvancementLoaderMixin",
+    "ServerCommandSourceMixin",
     "ServerPlayerNetworkHandlerMixin",
     "ServerPlayNetworkHandlerMixin",
     "SmithingScreenHandlerMixin",
