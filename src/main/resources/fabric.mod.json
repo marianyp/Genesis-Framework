@@ -3,7 +3,7 @@
   "id": "genesisframework",
   "version": "${version}",
   "name": "Genesis Framework",
-  "description": "A framework for creating custom Age progression systems.",
+  "description": "A framework for creating custom age progression systems.",
   "authors": [
     "uhmbyee / Mariany Pinkston"
   ],
@@ -11,7 +11,7 @@
     "homepage": "https://mariany.dev/",
     "sources": "https://github.com/marianyp/Genesis-Framework"
   },
-  "license": "CC0-1.0",
+  "license": "MPL-2.0",
   "icon": "assets/genesisframework/icon.png",
   "environment": "*",
   "entrypoints": {
