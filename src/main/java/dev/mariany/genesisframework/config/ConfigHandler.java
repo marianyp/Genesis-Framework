@@ -25,9 +25,9 @@ public class ConfigHandler {
             } catch (IOException error) {
                 GenesisFramework.LOGGER.error("Failed to load config: {}", error.getMessage());
             }
-        } else {
-            saveConfig();
         }
+
+        saveConfig();
     }
 
     private static void saveConfig() {
