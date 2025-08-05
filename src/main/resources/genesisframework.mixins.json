@@ -13,6 +13,7 @@
     "ServerAdvancementLoaderMixin",
     "ServerPlayerNetworkHandlerMixin",
     "ServerPlayNetworkHandlerMixin",
+    "SmithingScreenHandlerMixin",
     "TrialSpawnerStateMixin",
     "accessor.TrialSpawnerDataAccessor"
   ],
