@@ -10,6 +10,8 @@
   "commands.genesisframework.instructions.reset.failure": "There are no completed instructions to reset",
   "commands.genesisframework.instructions.skip": "Skipped %s instructions",
   "commands.genesisframework.instructions.skip.failure": "There are no pending instructions to skip",
+  "gamerule.sharedAgeProgression": "Shared Age Progression",
+  "gamerule.sharedAgeProgression.description": "Players earn age's at the same time.",
   "genesisframework.age.ageNotFound": "Unknown age: %s",
   "instruction.genesisframework.complete.title": "Guide Complete!",
   "instruction.genesisframework.view_ages": "View Ages",
