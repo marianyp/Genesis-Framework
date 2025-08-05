@@ -16,8 +16,9 @@ public class GFStats {
 
     private static RegistryEntry.Reference<Identifier> register(String name, StatFormatter formatter) {
         Identifier id = GenesisFramework.id(name);
+        RegistryEntry.Reference<Identifier> reference = Registry.registerReference(Registries.CUSTOM_STAT, id, id);
         Stats.CUSTOM.getOrCreateStat(id, formatter);
-        return Registry.registerReference(Registries.CUSTOM_STAT, id, id);
+        return reference;
     }
 
     public static void bootstrap() {
