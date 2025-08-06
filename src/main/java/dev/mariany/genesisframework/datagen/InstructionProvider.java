@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import dev.mariany.genesisframework.age.Age;
-import dev.mariany.genesisframework.age.AgeEntry;
+import dev.mariany.genesisframework.instruction.Instruction;
+import dev.mariany.genesisframework.instruction.InstructionEntry;
 import dev.mariany.genesisframework.registry.GFRegistryKeys;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
@@ -23,50 +23,61 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public abstract class AgesProvider implements DataProvider {
+public abstract class InstructionProvider implements DataProvider {
     protected final FabricDataOutput output;
     private final DataOutput.PathResolver pathResolver;
     private final CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup;
 
-    public AgesProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public InstructionProvider(
+            FabricDataOutput output,
+            CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup
+    ) {
         this.output = output;
-        this.pathResolver = output.getResolver(GFRegistryKeys.AGE);
+        this.pathResolver = output.getResolver(GFRegistryKeys.INSTRUCTION);
         this.registryLookup = registryLookup;
     }
 
-    public abstract void generateAges(RegistryWrapper.WrapperLookup registryLookup, Consumer<AgeEntry> consumer);
+    public abstract void generateInstructions(
+            RegistryWrapper.WrapperLookup registryLookup,
+            Consumer<InstructionEntry> consumer
+    );
 
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
         return this.registryLookup.thenCompose(lookup -> {
             final Set<Identifier> identifiers = Sets.newHashSet();
-            final Set<AgeEntry> ages = Sets.newHashSet();
+            final Set<InstructionEntry> instructions = Sets.newHashSet();
 
-            generateAges(lookup, ages::add);
+            generateInstructions(lookup, instructions::add);
 
             RegistryOps<JsonElement> ops = lookup.getOps(JsonOps.INSTANCE);
             final List<CompletableFuture<?>> futures = new ArrayList<>();
 
-            for (AgeEntry ageEntry : ages) {
-                Identifier id = ageEntry.getId();
+            for (InstructionEntry instructionEntry : instructions) {
+                Identifier id = instructionEntry.getId();
 
                 if (!identifiers.add(id)) {
-                    throw new IllegalStateException("Duplicate age " + ageEntry.getId());
+                    throw new IllegalStateException("Duplicate instruction " + instructionEntry.getId());
                 }
 
-                JsonObject advancementJson = Age.CODEC.encodeStart(ops, ageEntry.getAge())
-                        .getOrThrow(IllegalStateException::new).getAsJsonObject();
+                JsonObject advancementJson = Instruction.CODEC.encodeStart(
+                        ops,
+                        instructionEntry.getInstruction()
+                ).getOrThrow(IllegalStateException::new).getAsJsonObject();
 
-                FabricDataGenHelper.addConditions(advancementJson, FabricDataGenHelper.consumeConditions(ageEntry));
+                FabricDataGenHelper.addConditions(
+                        advancementJson,
+                        FabricDataGenHelper.consumeConditions(instructionEntry)
+                );
 
-                futures.add(DataProvider.writeToPath(writer, advancementJson, getOutputPath(ageEntry)));
+                futures.add(DataProvider.writeToPath(writer, advancementJson, getOutputPath(instructionEntry)));
             }
 
             return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
         });
     }
 
-    private Path getOutputPath(AgeEntry age) {
-        return pathResolver.resolveJson(age.getId());
+    private Path getOutputPath(InstructionEntry instruction) {
+        return pathResolver.resolveJson(instruction.getId());
     }
 }

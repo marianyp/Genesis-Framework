@@ -133,7 +133,7 @@ public class AgeManager {
         return this.ages.values();
     }
 
-    public List<Ingredient> getAllItemUnlocks(ServerPlayerEntity player) {
+    public List<Ingredient> getLockedItems(ServerPlayerEntity player) {
         return getAges()
                 .stream()
                 .filter(ageEntry -> !ageEntry.isDone(player))

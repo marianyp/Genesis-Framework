@@ -9,7 +9,7 @@ import dev.mariany.genesisframework.age.AgeManager;
 import dev.mariany.genesisframework.age.AgeShareManager;
 import dev.mariany.genesisframework.config.ConfigHandler;
 import dev.mariany.genesisframework.gamerule.GFGamerules;
-import dev.mariany.genesisframework.packet.clientbound.UpdateAgeItemUnlocksPayload;
+import dev.mariany.genesisframework.packet.clientbound.UpdateLockedItems;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.advancement.PlayerAdvancementTracker;
@@ -71,7 +71,7 @@ public class PlayerAdvancementTrackerMixin {
         Optional<AgeEntry> optionalAge = ageManager.find(advancement);
 
         if (optionalAge.isPresent()) {
-            ServerPlayNetworking.send(owner, new UpdateAgeItemUnlocksPayload(ageManager.getAllItemUnlocks(owner)));
+            ServerPlayNetworking.send(owner, new UpdateLockedItems(ageManager.getLockedItems(owner)));
 
             MinecraftServer server = owner.getServer();
 

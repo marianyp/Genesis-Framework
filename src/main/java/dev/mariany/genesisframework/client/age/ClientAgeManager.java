@@ -18,8 +18,8 @@ import java.util.*;
 public class ClientAgeManager {
     private static final ClientAgeManager INSTANCE = new ClientAgeManager();
 
-    private final List<Ingredient> itemUnlocks = new ArrayList<>();
-    private boolean initiatedItemUnlocks = false;
+    private final List<Ingredient> lockedItems = new ArrayList<>();
+    private boolean initiatedLockedItems = false;
 
     private ClientAgeManager() {
     }
@@ -31,24 +31,24 @@ public class ClientAgeManager {
     public void reset() {
         GenesisFramework.LOGGER.info("Resetting Client Age Manager");
 
-        itemUnlocks.clear();
-        initiatedItemUnlocks = false;
+        lockedItems.clear();
+        initiatedLockedItems = false;
     }
 
     public boolean isUnlocked(ItemStack stack) {
-        return itemUnlocks.stream().noneMatch(ingredient -> ingredient.test(stack));
+        return lockedItems.stream().noneMatch(ingredient -> ingredient.test(stack));
     }
 
-    public void updateItemUnlocks(Collection<Ingredient> changes) {
-        boolean initial = !initiatedItemUnlocks;
-        int oldSize = itemUnlocks.size();
-        List<Ingredient> difference = getDifference(itemUnlocks, changes);
+    public void updateLockedItems(Collection<Ingredient> changes) {
+        boolean initial = !initiatedLockedItems;
+        int oldSize = lockedItems.size();
+        List<Ingredient> difference = getDifference(lockedItems, changes);
 
-        itemUnlocks.clear();
-        itemUnlocks.addAll(changes);
-        initiatedItemUnlocks = true;
+        lockedItems.clear();
+        lockedItems.addAll(changes);
+        initiatedLockedItems = true;
 
-        GenesisFramework.LOGGER.info("Updated age instructions. Old Size: {} | New Size: {}", oldSize, itemUnlocks.size());
+        GenesisFramework.LOGGER.info("Updated age instructions. Old Size: {} | New Size: {}", oldSize, lockedItems.size());
 
         if (!initial) {
             afterUpdateItemUnlocks(difference);

@@ -11,10 +11,10 @@ import net.minecraft.text.Text;
 
 public class ClientboundPackets {
     public static void init() {
-        ClientPlayNetworking.registerGlobalReceiver(UpdateAgeItemUnlocksPayload.ID,
+        ClientPlayNetworking.registerGlobalReceiver(UpdateLockedItems.ID,
                 (payload, context) ->
                         context.client().executeSync(
-                                () -> ClientAgeManager.getInstance().updateItemUnlocks(payload.items())
+                                () -> ClientAgeManager.getInstance().updateLockedItems(payload.items())
                         )
         );
 

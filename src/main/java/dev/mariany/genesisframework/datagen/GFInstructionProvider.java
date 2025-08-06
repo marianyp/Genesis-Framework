@@ -13,8 +13,8 @@ import net.minecraft.text.Text;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class GFInstructionsProvider extends InstructionsProvider {
-    public GFInstructionsProvider(
+public class GFInstructionProvider extends InstructionProvider {
+    public GFInstructionProvider(
             FabricDataOutput output,
             CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup
     ) {
