@@ -56,6 +56,7 @@ public record Age(
                     .apply(instance, Age::new)
     );
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private final List<Ingredient> items = new ArrayList<>();
         private final List<RegistryKey<World>> dimensions = new ArrayList<>();
@@ -251,9 +252,10 @@ public record Age(
             ));
         }
 
-        public void build(Consumer<AgeEntry> exporter, Identifier id) {
+        public AgeEntry build(Consumer<AgeEntry> exporter, Identifier id) {
             AgeEntry ageEntry = this.build(id);
             exporter.accept(ageEntry);
+            return ageEntry;
         }
     }
 }

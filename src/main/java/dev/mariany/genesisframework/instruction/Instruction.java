@@ -35,6 +35,7 @@ public record Instruction(
                     .apply(instance, Instruction::new)
     );
 
+    @SuppressWarnings("unused")
     public static class Builder {
         @Nullable
         private Identifier parent = null;
@@ -96,6 +97,7 @@ public record Instruction(
             ));
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public InstructionEntry build(Consumer<InstructionEntry> exporter, Identifier id) {
             InstructionEntry instructionEntry = this.build(id);
             exporter.accept(instructionEntry);

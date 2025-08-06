@@ -1,0 +1,8 @@
+{
+  "ui.toast.challenge_complete": {
+    "replace": true,
+    "sounds": [
+      "genesisframework:ui/toast/instructions_complete"
+    ]
+  }
+}
