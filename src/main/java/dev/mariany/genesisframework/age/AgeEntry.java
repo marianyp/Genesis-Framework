@@ -133,6 +133,7 @@ public class AgeEntry {
         return player.getAdvancementTracker().getProgress(this.advancementEntry).isDone();
     }
 
+    @SuppressWarnings("unused")
     public Optional<Identifier> getParentAdvancementId() {
         return this.advancementEntry.value().parent();
     }

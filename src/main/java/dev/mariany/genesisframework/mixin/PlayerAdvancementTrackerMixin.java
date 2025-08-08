@@ -2,7 +2,6 @@ package dev.mariany.genesisframework.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import dev.mariany.genesisframework.advancement.criterion.GFCriteria;
 import dev.mariany.genesisframework.age.Age;
 import dev.mariany.genesisframework.age.AgeEntry;
 import dev.mariany.genesisframework.age.AgeManager;
@@ -44,20 +43,34 @@ public class PlayerAdvancementTrackerMixin {
         if (optionalAgeEntry.isPresent()) {
             AgeEntry ageEntry = optionalAgeEntry.get();
             Age age = ageEntry.getAge();
-            Optional<Identifier> parentIdentifier = age.parent();
+            Optional<Identifier> optionalParentId = age.parent();
 
-            if (age.requiresParent() && parentIdentifier.isPresent()) {
-                Optional<AgeEntry> parent = ageManager.get(parentIdentifier.get());
+            if (age.requiresParent() && optionalParentId.isPresent()) {
+                while (optionalParentId.isPresent()) {
+                    Optional<AgeEntry> optionalParent = ageManager.get(optionalParentId.get());
 
-                if (parent.isPresent() && !parent.get().isDone(owner)) {
-                    cir.setReturnValue(false);
+                    if (optionalParent.isPresent()) {
+                        AgeEntry parentAgeEntry = optionalParent.get();
+                        Age parentAge = parentAgeEntry.getAge();
+
+                        if (!parentAge.requiresParent()) {
+                            optionalParentId = parentAge.parent();
+                        } else {
+                            if (!parentAgeEntry.isDone(owner)) {
+                                cir.setReturnValue(false);
+                            }
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
         }
     }
 
     /**
-     * Triggers ${@link GFCriteria#OPEN_ADVANCEMENT_TAB}, updates client age item unlocks state, and shares the age advancement with other players.
+     * Updates client age item unlocks state and shares the age advancement with other players.
      */
     @WrapOperation(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;onStatusUpdate(Lnet/minecraft/advancement/AdvancementEntry;)V"))
     public void wrapOnStatusUpdate(
@@ -65,8 +78,6 @@ public class PlayerAdvancementTrackerMixin {
             AdvancementEntry advancement,
             Operation<Void> original
     ) {
-        GFCriteria.OBTAIN_ADVANCEMENT.trigger(owner, advancement);
-
         AgeManager ageManager = AgeManager.getInstance();
         Optional<AgeEntry> optionalAge = ageManager.find(advancement);
 

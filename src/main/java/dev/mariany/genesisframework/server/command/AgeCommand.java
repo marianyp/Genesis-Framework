@@ -10,7 +10,6 @@ import dev.mariany.genesisframework.age.AgeEntry;
 import dev.mariany.genesisframework.age.AgeManager;
 import dev.mariany.genesisframework.age.AgeShareManager;
 import dev.mariany.genesisframework.registry.GFRegistryKeys;
-import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.RegistryKeyArgumentType;
 import net.minecraft.registry.RegistryKey;
@@ -141,14 +140,17 @@ public class AgeCommand {
     }
 
     private static boolean takeAge(ServerPlayerEntity player, AgeEntry ageEntry) {
-        AdvancementEntry advancementEntry = ageEntry.getAdvancementEntry();
-        boolean removed = AdvancementHelper.revokeAdvancement(player, advancementEntry);
+        boolean removed = AdvancementHelper.revokeAdvancement(player, ageEntry.getAdvancementEntry());
 
-        List<AgeEntry> children = AgeManager.getInstance().getAges().stream().filter(otherAge ->
-                otherAge.getAge().parent()
-                        .map(parentId -> parentId.equals(ageEntry.getId()))
-                        .orElse(false)
-        ).toList();
+        List<AgeEntry> children = AgeManager.getInstance()
+                .getAges()
+                .stream()
+                .filter(otherAge ->
+                        otherAge.getAge().requiresParent() && otherAge.getAge().parent()
+                                .map(parentId -> parentId.equals(ageEntry.getId()))
+                                .orElse(false)
+                )
+                .toList();
 
         for (AgeEntry child : children) {
             removed = takeAge(player, child) || removed;

@@ -3,7 +3,6 @@ package dev.mariany.genesisframework.age;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mariany.genesisframework.advancement.criterion.CompleteTrialSpawnerCriteria;
-import dev.mariany.genesisframework.advancement.criterion.ObtainAdvancementCriterion;
 import dev.mariany.genesisframework.stat.GFStats;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.advancement.AdvancementRequirements;
@@ -126,7 +125,23 @@ public record Age(
                             .orElse("has_" + subpath + "_age")
             ).orElse("has_age");
 
-            return criterion(name, ObtainAdvancementCriterion.Conditions.create(AgeEntry.getAdvancementId(id)));
+            Identifier advancementId = AgeEntry.getAdvancementId(id);
+
+            return criterion(
+                    name,
+                    Criteria.TICK.create(new TickCriterion.Conditions(
+                                    Optional.of(
+                                            EntityPredicate.contextPredicateFromEntityPredicate(
+                                                    EntityPredicate.Builder.create().typeSpecific(
+                                                            PlayerPredicate.Builder.create()
+                                                                    .advancement(advancementId, true)
+                                                                    .build()
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
+            );
         }
 
         public Builder requireKill(

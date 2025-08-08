@@ -6,9 +6,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
 public class GFCriteria {
-    public static final ObtainAdvancementCriterion OBTAIN_ADVANCEMENT = register("obtain_advancement",
-            new ObtainAdvancementCriterion()
-    );
     public static final CompleteTrialSpawnerCriteria COMPLETE_TRIAL_SPAWNER_ADVANCEMENT = register(
             "complete_trial_spawner",
             new CompleteTrialSpawnerCriteria()
