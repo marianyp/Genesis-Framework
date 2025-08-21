@@ -4,7 +4,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AdvancementDisplaysMixin",
-    "ClientRecipeDisplayEntryMixin",
     "CrafterBlockMixin",
     "DataPackContentsMixin",
     "EntityMixin",
@@ -29,6 +28,7 @@
     "AdvancementsScreenMixin",
     "AnimatedResultButtonMixin",
     "ClientAdvancementManagerMixin",
+    "ClientRecipeDisplayEntryMixin",
     "MinecraftClientMixin",
     "RecipeBookWidgetMixin",
     "RecipeToastMixin",
